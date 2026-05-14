@@ -1,0 +1,65 @@
+server:
+  port: ${SERVER_PORT_POST:8082}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /posts/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+  override-with-generic-response: false
+
+spring:
+  application:
+    name: post-service
+  datasource:
+    url: ${POST_DB_URL}
+    username: ${POST_DB_USERNAME}
+    password: ${POST_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+  cache:
+    type: simple
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+    healthcheck:
+      enabled: false
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+    rabbit:
+      enabled: false
+    rabbitmq:
+      enabled: false

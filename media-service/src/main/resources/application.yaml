@@ -1,0 +1,65 @@
+server:
+  port: ${SERVER_PORT_MEDIA:8085}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /media/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+  override-with-generic-response: false
+
+spring:
+  application:
+    name: media-service
+  datasource:
+    url: ${MEDIA_DB_URL}
+    username: ${MEDIA_DB_USERNAME}
+    password: ${MEDIA_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION}
+  s3:
+    bucket: ${AWS_BUCKET_NAME}
+    endpoint: ${AWS_S3_ENDPOINT}
+
+media:
+  allowed-types: image/jpeg,image/png,image/gif,image/webp,application/pdf
+  max-size-bytes: 10485760 # 10MB
+  local-path: ${MEDIA_LOCAL_PATH}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

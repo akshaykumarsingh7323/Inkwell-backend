@@ -1,0 +1,132 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      
+      routes:
+        # Auth Service
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v1/auth/**, /api/v1/oauth2/**, /api/v1/login/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+            - PreserveHostHeader
+
+        # Post Service
+        - id: post-service-api
+          uri: lb://post-service
+          predicates:
+            - Path=/api/v1/posts/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Comment Service
+        - id: comment-service-api
+          uri: lb://comment-service
+          predicates:
+            - Path=/api/v1/comments/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Category Service
+        - id: category-service-api
+          uri: lb://category-service
+          predicates:
+            - Path=/api/v1/categories/**, /api/v1/tags/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Media Service
+        - id: media-service-api
+          uri: lb://media-service
+          predicates:
+            - Path=/api/v1/media/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Newsletter Service
+        - id: newsletter-service-api
+          uri: lb://newsletter-service
+          predicates:
+            - Path=/api/v1/newsletter/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Notification Service
+        - id: notification-service-api
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        - id: notification-service-audit-api
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/v1/audit-logs/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+        # Payment Service
+        - id: payment-service-api
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/v1/payments/**
+          filters:
+            - RewritePath=/api/v1/(?<segment>.*), /${segment}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: auth-service
+        url: /api/v1/auth/v3/api-docs
+      - name: post-service
+        url: /api/v1/posts/v3/api-docs
+      - name: category-service
+        url: /api/v1/categories/v3/api-docs
+      - name: comment-service
+        url: /api/v1/comments/v3/api-docs
+      - name: media-service
+        url: /api/v1/media/v3/api-docs
+      - name: newsletter-service
+        url: /api/v1/newsletter/v3/api-docs
+      - name: notification-service
+        url: /api/v1/notifications/v3/api-docs
+      - name: payment-service
+        url: /api/v1/payments/v3/api-docs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+jwt:
+  secret: ${JWT_SECRET:InkwellBloggingPlatformSecretKeyForJWTAuthentication2026SecureKeyHS256HS384HS512}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

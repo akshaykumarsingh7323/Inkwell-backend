@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #eee; border-radius: 10px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #2563eb; margin: 0; }
+        .content { margin-bottom: 30px; }
+        .footer { font-size: 12px; color: #777; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+        .unsubscribe { color: #777; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>InkWell</h1>
+        </div>
+        <div class="content" th:utext="${content}">
+            <!-- Dynamic content from rich text editor will be injected here -->
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 InkWell Blogging Platform. All rights reserved.</p>
+            <p>You're receiving this because you're a valued member of our community.</p>
+            <p>Too many emails? <a th:href="${unsubscribeUrl}" class="unsubscribe">Unsubscribe here</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

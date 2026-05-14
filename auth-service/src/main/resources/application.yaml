@@ -1,0 +1,113 @@
+server:
+  port: ${SERVER_PORT_AUTH:8081}
+  forward-headers-strategy: framework
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /auth/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+
+spring:
+  application:
+    name: auth-service
+  cloud:
+    loadbalancer:
+      cache:
+        enabled: true
+        ttl: 30s
+  
+  datasource:
+    url: ${AUTH_DB_URL}
+    username: ${AUTH_DB_USERNAME}
+    password: ${AUTH_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+            redirect-uri: "http://localhost:8081/api/v1/login/oauth2/code/google"
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - user:email
+              - read:user
+            redirect-uri: "http://localhost:8081/api/v1/login/oauth2/code/github"
+        provider:
+          github:
+            user-name-attribute: login
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+  refresh-token:
+    expiration: ${JWT_REFRESH_EXPIRATION}
+
+twilio:
+  account-sid: ${TWILIO_ACCOUNT_SID}
+  auth-token: ${TWILIO_AUTH_TOKEN}
+  verify-service-sid: ${TWILIO_VERIFY_SERVICE_SID}
+
+oauth2:
+  redirect:
+    uri: ${OAUTH2_REDIRECT_URI}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+    mail:
+      enabled: false
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO

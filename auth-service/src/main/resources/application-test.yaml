@@ -1,0 +1,4 @@
+twilio:
+  account-sid: dummy
+  auth-token: dummy
+  verify-service-sid: dummy

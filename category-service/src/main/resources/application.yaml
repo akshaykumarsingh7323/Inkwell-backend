@@ -1,0 +1,50 @@
+server:
+  port: ${SERVER_PORT_CATEGORY:8084}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /categories/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+  override-with-generic-response: false
+
+spring:
+  application:
+    name: category-service
+  datasource:
+    url: ${CATEGORY_DB_URL}
+    username: ${CATEGORY_DB_USERNAME}
+    password: ${CATEGORY_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  cache:
+    type: simple
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,64 @@
+server:
+  port: ${SERVER_PORT_COMMENT:8083}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /comments/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+  override-with-generic-response: false
+
+spring:
+  application:
+    name: comment-service
+  datasource:
+    url: ${COMMENT_DB_URL}
+    username: ${COMMENT_DB_USERNAME}
+    password: ${COMMENT_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+comment:
+  auto-approve: ${COMMENT_AUTO_APPROVE}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    fetch-registry: true
+    register-with-eureka: true
+    healthcheck:
+      enabled: false
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    rabbit:
+      enabled: false
+    rabbitmq:
+      enabled: false
+    redis:
+      enabled: false

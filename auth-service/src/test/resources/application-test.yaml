@@ -22,8 +22,20 @@ spring:
   mail:
     host: localhost
     port: 25
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 1000
+          timeout: 1000
+          writetimeout: 1000
   main:
     allow-bean-definition-overriding: true
+
+logging:
+  level:
+    com.inkwell: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
 jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   expiration: 86400000

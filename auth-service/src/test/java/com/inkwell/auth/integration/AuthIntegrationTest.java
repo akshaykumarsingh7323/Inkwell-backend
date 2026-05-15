@@ -11,10 +11,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.inkwell.auth.dto.RegisterRequest;
 
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AuthIntegrationTest {
 
     @Autowired

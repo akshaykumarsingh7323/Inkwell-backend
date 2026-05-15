@@ -36,7 +36,7 @@ public class MediaServiceImpl implements MediaService {
     private final MediaRepository mediaRepository;
     private final S3Client s3Client;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${aws.bucket-name}")
     private String bucketName;
 
     @Value("${aws.region}")

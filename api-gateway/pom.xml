@@ -87,20 +87,17 @@
 			<version>2.3.0</version>
 		</dependency>
 
-		<!-- for .env-->
-		<dependency>
-			<groupId>me.paulschwarz</groupId>
-			<artifactId>spring-dotenv</artifactId>
-			<version>4.0.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
+				
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					
+					
 					<mainClass>com.inkwell.gateway.ApiGatewayApplication</mainClass>
 					<excludes>
 						<exclude>
@@ -114,3 +111,8 @@
 	</build>
 
 </project>
+
+
+
+
+

@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: "optional:file:../.env[.properties]"
   application:
     name: api-gateway
   
@@ -114,15 +116,15 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
 
 jwt:
-  secret: ${JWT_SECRET:InkwellBloggingPlatformSecretKeyForJWTAuthentication2026SecureKeyHS256HS384HS512}
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
 
 management:
@@ -130,3 +132,4 @@ management:
     web:
       exposure:
         include: "*"
+

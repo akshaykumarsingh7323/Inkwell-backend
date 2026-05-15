@@ -1,0 +1,197 @@
+services:
+
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    container_name: eureka-server
+    env_file: .env
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    env_file: .env
+    environment:
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - mysql
+
+  post-service:
+    build:
+      context: .
+      dockerfile: post-service/Dockerfile
+    container_name: post-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - mysql
+      - rabbitmq
+
+  comment-service:
+    build:
+      context: .
+      dockerfile: comment-service/Dockerfile
+    container_name: comment-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+      - mysql
+      - rabbitmq
+
+  category-service:
+    build:
+      context: .
+      dockerfile: category-service/Dockerfile
+    container_name: category-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+      - mysql
+
+  media-service:
+    build:
+      context: .
+      dockerfile: media-service/Dockerfile
+    container_name: media-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      EUREKA_HOST: eureka-server
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+      - mysql
+
+  newsletter-service:
+    build:
+      context: .
+      dockerfile: newsletter-service/Dockerfile
+    container_name: newsletter-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+      - mysql
+      - rabbitmq
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+      - mysql
+      - rabbitmq
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    container_name: payment-service
+    env_file: .env
+    environment:
+      MYSQL_HOST: mysql
+      RABBITMQ_HOST: rabbitmq
+      EUREKA_HOST: eureka-server
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+      - mysql
+      - rabbitmq
+
+  admin-server:
+    build:
+      context: .
+      dockerfile: admin-server/Dockerfile
+    container_name: admin-server
+    env_file: .env
+    environment:
+      EUREKA_HOST: eureka-server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka-server
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
+
+volumes:
+  mysql-data:

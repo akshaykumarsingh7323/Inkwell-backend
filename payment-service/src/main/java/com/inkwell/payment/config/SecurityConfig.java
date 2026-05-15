@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/payments/check").permitAll() // Internal checks might be allowed
+                        .requestMatchers("/payments/check", "/actuator/**").permitAll() // Internal checks and actuator allowed
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new GatewayHeaderFilter(), UsernamePasswordAuthenticationFilter.class);

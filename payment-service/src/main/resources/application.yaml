@@ -2,10 +2,12 @@ server:
   port: ${SERVER_PORT_PAYMENT:8089}
 
 spring:
+  config:
+    import: "optional:file:../.env[.properties]"
   application:
     name: payment-service
   datasource:
-    url: ${PAYMENT_DB_URL}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/payment_db?createDatabaseIfNotExist=true
     username: ${PAYMENT_DB_USERNAME}
     password: ${PAYMENT_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,19 +22,19 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   rabbitmq:
-    host: ${RABBITMQ_HOST}
+    host: ${RABBITMQ_HOST:localhost}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
 
 # Razorpay Configuration
 razorpay:
@@ -47,3 +49,4 @@ management:
 
 platform:
   commission-rate: 0.2
+

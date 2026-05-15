@@ -10,6 +10,8 @@ springdoc:
     disable-swagger-default-url: true
 
 spring:
+  config:
+    import: "optional:file:../.env[.properties]"
   application:
     name: auth-service
   cloud:
@@ -19,7 +21,7 @@ spring:
         ttl: 30s
   
   datasource:
-    url: ${AUTH_DB_URL}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/auth_db?createDatabaseIfNotExist=true
     username: ${AUTH_DB_USERNAME}
     password: ${AUTH_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -43,21 +45,21 @@ spring:
             scope:
               - email
               - profile
-            redirect-uri: "http://localhost:8081/api/v1/login/oauth2/code/google"
+            redirect-uri: "http://${SERVER_HOST:localhost}:8081/api/v1/login/oauth2/code/google"
           github:
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
             scope:
               - user:email
               - read:user
-            redirect-uri: "http://localhost:8081/api/v1/login/oauth2/code/github"
+            redirect-uri: "http://${SERVER_HOST:localhost}:8081/api/v1/login/oauth2/code/github"
         provider:
           github:
             user-name-attribute: login
 
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:
@@ -69,9 +71,9 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
+  expiration: ${JWT_EXPIRATION:86400000}
   refresh-token:
-    expiration: ${JWT_REFRESH_EXPIRATION}
+    expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 
 twilio:
   account-sid: ${TWILIO_ACCOUNT_SID}
@@ -80,17 +82,17 @@ twilio:
 
 oauth2:
   redirect:
-    uri: ${OAUTH2_REDIRECT_URI}
+    uri: ${OAUTH2_REDIRECT_URI:http://localhost:4200/oauth/callback}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
 
 management:
   endpoints:
@@ -111,3 +113,4 @@ logging:
     org.springframework.security: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
+

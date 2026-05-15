@@ -1,0 +1,85 @@
+name: Inkwell Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-analyze:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: inkwell_db
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test
+        run: mvn clean test -pl "!eureka-server"
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/inkwell_db
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+
+  deploy:
+    needs: test-and-analyze
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Create project directory if it doesn't exist
+            mkdir -p ~/inkwell-app
+            cd ~/inkwell-app
+            
+            # Clone or Pull Backend
+            if [ ! -d "Inkwell-backend" ]; then
+              # NOTE: Replace 'YOUR_USERNAME' with your actual GitHub username
+              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Backend.git Inkwell-backend
+            fi
+            cd Inkwell-backend
+            git checkout main
+            git pull https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Backend.git main
+            
+            # Clone Frontend if not present (needed for some build contexts)
+            cd ..
+            if [ ! -d "inkwell-frontend" ]; then
+              # NOTE: Replace 'YOUR_USERNAME' with your actual GitHub username
+              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Frontend.git inkwell-frontend
+            fi
+            
+            # Build and restart all containers
+            cd Inkwell-backend
+            docker compose up -d --build

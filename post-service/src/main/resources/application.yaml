@@ -10,10 +10,12 @@ springdoc:
   override-with-generic-response: false
 
 spring:
+  config:
+    import: "optional:file:../.env[.properties]"
   application:
     name: post-service
   datasource:
-    url: ${POST_DB_URL}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/post_db?createDatabaseIfNotExist=true
     username: ${POST_DB_USERNAME}
     password: ${POST_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,7 +31,7 @@ spring:
 
 
   rabbitmq:
-    host: ${RABBITMQ_HOST}
+    host: ${RABBITMQ_HOST:localhost}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
 
@@ -39,14 +41,14 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
     healthcheck:
       enabled: false
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
 
 management:
   endpoints:
@@ -63,3 +65,4 @@ management:
       enabled: false
     rabbitmq:
       enabled: false
+

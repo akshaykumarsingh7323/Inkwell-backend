@@ -10,10 +10,12 @@ springdoc:
   override-with-generic-response: false
 
 spring:
+  config:
+    import: "optional:file:../.env[.properties]"
   application:
     name: media-service
   datasource:
-    url: ${MEDIA_DB_URL}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/media_db?createDatabaseIfNotExist=true
     username: ${MEDIA_DB_USERNAME}
     password: ${MEDIA_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,25 +37,23 @@ spring:
 aws:
   access-key: ${AWS_ACCESS_KEY}
   secret-key: ${AWS_SECRET_KEY}
-  region: ${AWS_REGION}
-  s3:
-    bucket: ${AWS_BUCKET_NAME}
-    endpoint: ${AWS_S3_ENDPOINT}
+  region: ${AWS_REGION:ap-south-1}
+  bucket-name: ${AWS_BUCKET_NAME:inkwell-media-post-storage}
 
 media:
   allowed-types: image/jpeg,image/png,image/gif,image/webp,application/pdf
   max-size-bytes: 10485760 # 10MB
-  local-path: ${MEDIA_LOCAL_PATH}
+  local-path: ${MEDIA_LOCAL_PATH:./uploads}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL}
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
 
 management:
   endpoints:
@@ -63,3 +63,4 @@ management:
   endpoint:
     health:
       show-details: always
+

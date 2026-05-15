@@ -1,0 +1,48 @@
+# --- Maven ---
+target/
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
+
+# --- IDEs ---
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.project
+.classpath
+.settings/
+.factorypath
+.springBeans
+.sts4-cache
+.apt_generated/
+
+# --- Environment & Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Logs ---
+*.log
+logs/
+
+# --- OS Specific ---
+Thumbs.db
+.DS_Store
+
+# --- Media/Uploads ---
+media-service/uploads/
+uploads/
+
+# --- Other ---
+HELP.md
+bin/
+build/
+node_modules/
+dist/
+coverage-aggregate/
+
+# --- Windows ---
+*.bat

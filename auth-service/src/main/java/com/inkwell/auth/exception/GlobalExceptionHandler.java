@@ -71,6 +71,11 @@ public class GlobalExceptionHandler {
         return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An internal server error occurred");
     }
 
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        return createResponse(HttpStatus.NOT_FOUND, "Resource not found: " + ex.getResourcePath());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
         log.error("General exception: ", ex);

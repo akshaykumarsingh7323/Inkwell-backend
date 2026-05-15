@@ -11,6 +11,17 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+  mail:
+    host: localhost
+    port: 25
+    username: test-user
+    password: test-password
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
   rabbitmq:
     listener:
       simple:

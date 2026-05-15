@@ -61,18 +61,16 @@ jobs:
             
             # Clone or Pull Backend
             if [ ! -d "Inkwell-backend" ]; then
-              # NOTE: Replace 'YOUR_USERNAME' with your actual GitHub username
-              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Backend.git Inkwell-backend
+              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/akshaykumarsingh7323/Inkwell-backend.git Inkwell-backend
             fi
             cd Inkwell-backend
             git checkout main
-            git pull https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Backend.git main
+            git pull https://x-access-token:${{ secrets.GH_PAT }}@github.com/akshaykumarsingh7323/Inkwell-backend.git main
             
             # Clone Frontend if not present (needed for some build contexts)
             cd ..
             if [ ! -d "inkwell-frontend" ]; then
-              # NOTE: Replace 'YOUR_USERNAME' with your actual GitHub username
-              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/YOUR_USERNAME/Inkwell-Frontend.git inkwell-frontend
+              git clone https://x-access-token:${{ secrets.GH_PAT }}@github.com/akshaykumarsingh7323/Inkwell-frontend.git inkwell-frontend
             fi
             
             # Build and restart all containers

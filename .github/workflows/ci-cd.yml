@@ -35,11 +35,6 @@ jobs:
 
       - name: Build and Test
         run: mvn clean test -pl "!eureka-server"
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/inkwell_db
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: root
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
 
       - name: SonarQube Scan
         env:

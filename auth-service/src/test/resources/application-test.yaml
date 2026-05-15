@@ -38,12 +38,12 @@ logging:
     org.hibernate.SQL: DEBUG
 
 twilio:
-  account-sid: dummy
-  auth-token: dummy
-  verify-service-sid: dummy
+  account-sid: ${TWILIO_ACCOUNT_SID:placeholder}
+  auth-token: ${TWILIO_AUTH_TOKEN:placeholder}
+  verify-service-sid: ${TWILIO_VERIFY_SERVICE_SID:placeholder}
 
 jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
   expiration: 86400000
   refresh-token:
     expiration: 604800000

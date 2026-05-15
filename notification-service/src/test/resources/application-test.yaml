@@ -14,8 +14,8 @@ spring:
   mail:
     host: localhost
     port: 25
-    username: test-user
-    password: test-password
+    username: ${MAIL_USERNAME:placeholder}
+    password: ${MAIL_PASSWORD:placeholder}
     properties:
       mail:
         smtp:

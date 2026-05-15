@@ -17,3 +17,9 @@ spring:
 eureka:
   client:
     enabled: false
+
+aws:
+  access-key: ${AWS_ACCESS_KEY:placeholder}
+  secret-key: ${AWS_SECRET_KEY:placeholder}
+  region: ap-south-1
+  bucket-name: inkwell-media-post-storage

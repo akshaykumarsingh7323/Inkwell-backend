@@ -75,4 +75,11 @@ jobs:
             
             # Build and restart all containers
             cd Inkwell-backend
-            docker compose up -d --build
+            if command -v docker-compose &> /dev/null; then
+              docker-compose up -d --build
+            elif docker compose version &> /dev/null; then
+              docker compose up -d --build
+            else
+              echo "Error: Docker or Docker Compose not found on EC2 instance."
+              exit 1
+            fi

@@ -9,7 +9,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>api-gateway</artifactId>
-	<name/>
+	<name>api-gateway</name>
 	<description/>
 	<url/>
 	<licenses>
@@ -25,8 +25,6 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
-		<spring-cloud.version>2023.0.3</spring-cloud.version>
 		<maven.compiler.fork>true</maven.compiler.fork>
 		<maven.compiler.meminitial>256m</maven.compiler.meminitial>
 		<maven.compiler.maxmem>512m</maven.compiler.maxmem>

@@ -12,6 +12,7 @@
 	</parent>
 
 	<artifactId>eureka-server</artifactId>
+	<name>eureka-server</name>
 
 	<properties>
 		<maven.compiler.fork>true</maven.compiler.fork>

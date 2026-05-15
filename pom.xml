@@ -35,6 +35,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <springdoc.version>2.5.0</springdoc.version>
         <jacoco.version>0.8.11</jacoco.version>
         <jacoco.excludes>**/dto/**:**/entity/**:**/config/**:**/exception/**:**/client/**:**/*Application.class</jacoco.excludes>
         <sonar.organization>${env.SONAR_ORGANIZATION}</sonar.organization>
@@ -88,6 +89,16 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+
             </dependency>
         </dependencies>
     </dependencyManagement>

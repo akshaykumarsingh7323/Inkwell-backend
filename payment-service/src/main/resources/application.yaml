@@ -1,6 +1,13 @@
 server:
   port: ${SERVER_PORT_PAYMENT:8089}
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /payments/v3/api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+
 spring:
   config:
     import: "optional:file:../.env[.properties]"

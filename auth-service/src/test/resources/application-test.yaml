@@ -36,6 +36,12 @@ logging:
     com.inkwell: DEBUG
     org.springframework.web: INFO
     org.hibernate.SQL: DEBUG
+
+twilio:
+  account-sid: dummy
+  auth-token: dummy
+  verify-service-sid: dummy
+
 jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   expiration: 86400000

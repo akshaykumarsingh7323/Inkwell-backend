@@ -37,6 +37,9 @@
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <jacoco.version>0.8.11</jacoco.version>
         <jacoco.excludes>**/dto/**:**/entity/**:**/config/**:**/exception/**:**/client/**:**/*Application.class</jacoco.excludes>
+        <sonar.organization>${env.SONAR_ORGANIZATION}</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>com.inkwell:inkwell-backend</sonar.projectKey>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${maven.multiModuleProjectDirectory}/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
@@ -116,6 +119,11 @@
                     <configuration>
                         <jvmArguments>${spring-boot.run.jvmArguments}</jvmArguments>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.11.0.3922</version>
                 </plugin>
             </plugins>
         </pluginManagement>

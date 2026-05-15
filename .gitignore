@@ -42,7 +42,6 @@ bin/
 build/
 node_modules/
 dist/
-coverage-aggregate/
 
 # --- Windows ---
 *.bat

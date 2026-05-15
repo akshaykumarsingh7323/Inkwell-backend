@@ -47,8 +47,8 @@ public class NewsletterServiceImpl implements NewsletterService {
         Optional<Subscriber> existingOpt = subscriberRepository.findByEmailAndFollowedAuthorId(request.getEmail(), authorId);
         
         Subscriber subscriber;
-        // Enforce PENDING for all new subscriptions as per double opt-in requirement
-        SubscriberStatus targetStatus = SubscriberStatus.PENDING;
+        // Automatically activate if the user is already logged in (has userId)
+        SubscriberStatus targetStatus = (request.getUserId() != null) ? SubscriberStatus.ACTIVE : SubscriberStatus.PENDING;
 
         if (existingOpt.isPresent()) {
             subscriber = existingOpt.get();
@@ -84,11 +84,15 @@ public class NewsletterServiceImpl implements NewsletterService {
         subscriberRepository.save(subscriber);
         
         try {
-            triggerConfirmationEmail(subscriber);
+            if (subscriber.getStatus() == SubscriberStatus.ACTIVE) {
+                sendWelcomeEmail(subscriber.getEmail(), subscriber.getToken());
+            } else {
+                triggerConfirmationEmail(subscriber);
+            }
         } catch (Exception e) {
-            log.error("Failed to send confirmation email to {}. RabbitMQ might be down.", subscriber.getEmail(), e);
+            log.error("Failed to send notification email to {}. RabbitMQ might be down.", subscriber.getEmail(), e);
             // We still saved the subscriber, but we should inform the user about the email delay
-            throw new CustomException("Subscription saved, but we're having trouble sending the confirmation email. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE);
+            throw new CustomException("Subscription saved, but we're having trouble sending the notification email. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

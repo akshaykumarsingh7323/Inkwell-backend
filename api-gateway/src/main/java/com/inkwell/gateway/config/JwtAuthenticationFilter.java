@@ -96,7 +96,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
             lowerPath.contains("/auth/forgot-password") || 
             lowerPath.contains("/auth/reset-password") ||
             lowerPath.contains("/auth/refresh") ||
-            lowerPath.contains("/auth/oauth-success")) {
+            lowerPath.contains("/auth/oauth-success") ||
+            lowerPath.contains("/oauth2/") ||
+            lowerPath.contains("/login/oauth2/")) {
             return true;
         }
 

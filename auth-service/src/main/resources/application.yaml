@@ -49,7 +49,7 @@ spring:
             scope:
               - email
               - profile
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            redirect-uri: "{baseUrl}/api/v1/login/oauth2/code/google"
 
           github:
             client-id: ${GITHUB_CLIENT_ID}
@@ -57,7 +57,7 @@ spring:
             scope:
               - user:email
               - read:user
-            redirect-uri: "{baseUrl}/login/oauth2/code/github"
+            redirect-uri: "{baseUrl}/api/v1/login/oauth2/code/github"
 
         provider:
           github:

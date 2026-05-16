@@ -97,7 +97,7 @@ public class SecurityConfig {
                                 .baseUri("/oauth2/authorization")
                                 .authorizationRequestResolver(
                                         new CustomOAuth2AuthorizationRequestResolver(clientRegistrationRepository)))
-                        .redirectionEndpoint(redirection -> redirection.baseUri("/api/v1/login/oauth2/code/*"))
+                        .redirectionEndpoint(redirection -> redirection.baseUri("/login/oauth2/code/*"))
                         .successHandler(oAuth2SuccessHandler)
                         .failureHandler(oAuth2FailureHandler));
 
